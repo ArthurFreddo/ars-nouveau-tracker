@@ -48,25 +48,20 @@ export default function App() {
 
   return <MotionConfig reducedMotion="user">
     <main className="tracker">
-      <div className="masthead">
-        <div className="brand"><GameIcon name="book" /><span>O GRIMÓRIO <b>ARCANO</b></span></div>
-        <div className="masthead-meta"><span className="version-tag">MINECRAFT JAVA <b>1.20.1</b></span><span className={saved ? 'save-status' : 'save-status save-error'} role="status"><i />{saved ? 'Progresso salvo' : 'Salvamento indisponível'}</span></div>
-      </div>
       <header className="hero">
-        <img className="hero-scene" src="/images/arcane-workshop.png" alt="" />
         <div className="hero-shade" />
         <img className="hero-portrait" src="/images/beatriz-mage.png" alt="Beatriz em uma versão de maga, com seu grimório e um cristal violeta." />
         <div className="magic-motes" aria-hidden="true">{Array.from({ length: 7 }, (_, i) => <i key={i} style={{ '--i': i } as CSSProperties} />)}</div>
+        <div className="hero-emblem" aria-hidden="true"><img className="game-icon" src="/images/enchanted-book-emblem-v3.png" alt="" /></div>
         <div className="hero-copy">
-          <p className="eyebrow"><span className="magic-star">✦</span> DIÁRIO DE PROGRESSÃO MÁGICA</p>
           <h1>Ars Nouveau <span>Progress Tracker</span></h1>
-          <p className="hero-subtitle">Uma descoberta. Um feitiço. Um novo capítulo.</p>
-          <div className="hero-progress"><div className="progress-caption"><span>Sua jornada até aqui</span><b>{completedStages} de 8 etapas concluídas</b></div><ProgressBar completed={completedCount} total={total} label="Progresso geral" /></div>
+          <p className="hero-subtitle"><span>✦</span> Diário de progressão mágica <span>✦</span></p>
+          <div className="hero-progress"><ProgressBar completed={completedCount} total={total} label="Progresso geral" /></div>
         </div>
         <div className="hero-art-label"><span>BEATRIZ</span><small>EDIÇÃO ARCANA · TGT</small></div>
+        <div className="masthead-meta"><span className="version-tag">JAVA <b>1.20.1</b></span><span className={saved ? 'save-status' : 'save-status save-error'} role="status"><i />{saved ? 'Progresso salvo' : 'Salvamento indisponível'}</span></div>
       </header>
 
-      <div className="journey-heading"><h2><span>✦</span> O caminho do mago</h2><span>8 etapas · uma jornada</span></div>
       <nav className="stage-nav wood-frame" aria-label="Etapas da jornada">
         {stages.map((item, index) => {
           const count = item.tasks.filter(task => completed.has(task.id)).length
@@ -85,11 +80,11 @@ export default function App() {
       <div className="workspace">
         <motion.section key={stage.id} className="stage-panel wood-frame" aria-labelledby="stage-title"
           initial={reducedMotion ? false : { opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .22 }}>
-          <div className="stage-heading">
+          <div className="stage-intro"><div className="stage-heading">
             <div className="item-slot stage-emblem"><GameIcon name={stage.icon} /></div>
-            <div className="stage-heading-copy"><div className="eyebrow">ETAPA {String(stageIndex + 1).padStart(2, '0')} <span>·</span> {stage.difficulty}</div><h2 id="stage-title">{stage.title}</h2><p>{stage.description}</p></div>
+            <div className="stage-heading-copy"><div className="eyebrow">CAPÍTULO {String(stageIndex + 1).padStart(2, '0')} <span>·</span> {stage.difficulty}</div><h2 id="stage-title">{stage.title}</h2><p>{stage.description}</p></div>
           </div>
-          <div className="stage-progress"><ProgressBar completed={stageCompleted} total={stage.tasks.length} label="Progresso da etapa" /></div>
+          <div className="stage-progress"><ProgressBar completed={stageCompleted} total={stage.tasks.length} label="Progresso da etapa" /></div></div>
           <div className="activity-toolbar"><h3>{stageDone ? <><PixelIcon name="check" />Etapa concluída</> : <>Suas atividades <span>{remaining} {remaining === 1 ? 'pendente' : 'pendentes'}</span></>}</h3>
             <label className="pending-filter"><input type="checkbox" checked={pendingOnly} onChange={event => setPendingOnly(event.target.checked)} /><span className="filter-switch" aria-hidden="true" /><span>Só pendentes</span></label>
           </div>
@@ -107,13 +102,15 @@ export default function App() {
         </motion.section>
 
         <aside className="sidebar">
-          <section className="summary-panel wood-frame"><div className="panel-heading"><span className="eyebrow">SEU GRIMÓRIO</span><GameIcon name="crystal" /></div><h2>Jornada em números</h2>
-            <div className="summary-progress"><div className="progress-orb" style={{ '--progress': `${percent}%` } as CSSProperties}><span><strong>{percent}<small>%</small></strong><i>da jornada</i></span></div><div className="summary-stat"><strong>{completedCount}<span> / {total}</span></strong><p>atividades concluídas</p><span className="stages-stat">{completedStages} / 8 etapas completas</span></div></div>
-            <dl><div><dt><i className="status-square green" />Concluídas</dt><dd>{completedCount}</dd></div><div><dt><i className="status-square" />Pendentes</dt><dd>{total - completedCount}</dd></div></dl>
+          <section className="summary-panel wood-frame"><div className="panel-heading"><h2>Progresso geral</h2><GameIcon name="crystal" /></div>
+            <ProgressBar completed={completedCount} total={total} label="Resumo do progresso" />
+            <dl><div><dt><i className="status-square green" />Concluídas</dt><dd>{completedCount}</dd></div><div><dt><i className="status-square" />Pendentes</dt><dd>{total - completedCount}</dd></div><div><dt><i className="status-square violet" />Total</dt><dd>{total}</dd></div></dl>
+            <p className="stages-stat">{completedStages} de 8 etapas completas · {percent}% da jornada</p>
             <p className="summary-note">{total - provisionalCount} atividades do roteiro · {provisionalCount} provisórias<br />As demonstrações também entram no total.</p>
           </section>
           <section className="next-task-panel"><div className="eyebrow">{stageDone ? 'ETAPA COMPLETA' : 'SEU PRÓXIMO PASSO'}</div>{nextTask ? <><GameIcon name={nextTask.icon} /><h3>{nextTask.title}</h3><p>Etapa {stageIndex + 1} · {stage.name}</p><button className="primary-button" onClick={openNextTask}>Abrir próxima atividade <PixelIcon name="arrow" /></button></> : <><GameIcon name="crystal" /><h3>Tudo pronto por aqui.</h3><p>{stageIndex < 7 ? 'Continue para a próxima etapa do grimório.' : 'Sua jornada está completa.'}</p>{stageIndex < 7 && <button className="primary-button" onClick={() => setSelected(stages[stageIndex + 1].id)}>Próxima etapa <PixelIcon name="arrow" /></button>}</>}</section>
-          <section className="journal-panel"><img src="/images/arcane-workshop.png" alt="" loading="lazy" /><div><span className="journal-star">✦</span><blockquote>Todo grande feitiço começa com um único ponto de Source.</blockquote><p>UMA JORNADA, UM PASSO POR VEZ</p></div></section>
+          <section className="journal-panel"><span className="journal-star">✦</span><blockquote>Todo grande feitiço começa com um único ponto de Source.</blockquote><p>ARS NOUVEAU</p></section>
+          <div className="grimoire-decoration" aria-hidden="true"><img src="/images/enchanted-grimoire-v3.png" alt="" loading="lazy" /></div>
           <p className={`local-note ${saved ? '' : 'save-error'}`}><PixelIcon name="save" />{saved ? 'Salvo automaticamente neste navegador.' : 'As marcações ficarão apenas nesta sessão.'}</p>
         </aside>
       </div>
