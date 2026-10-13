@@ -1,9 +1,9 @@
 import type { Stage } from './types'
+import { coleta } from './coleta'
+import { torre } from './torre'
+import { equipamentos } from './equipamentos'
 
-export const stages: Stage[] = [
-  ['01-coleta', 'Coleta', 'Exploração e coleta inicial', 'Organize os primeiros recursos da sua jornada.', 'pickaxe'],
-  ['02-torre', 'Torre', 'Fundação da Torre do Mago', 'Prepare um espaço para sua jornada mágica.', 'tower'],
-  ['03-equipamentos', 'Equipamentos', 'Equipamentos mágicos iniciais', 'Acompanhe a preparação dos seus equipamentos.', 'book'],
+const provisionalStages: Stage[] = [
   ['04-source', 'Source', 'Produção de Source', 'Um espaço reservado para o próximo capítulo.', 'crystal'],
   ['05-criaturas', 'Criaturas', 'Criaturas mágicas', 'Um espaço reservado para o próximo capítulo.', 'creature'],
   ['06-automacao', 'Automação', 'Automação e logística', 'Um espaço reservado para o próximo capítulo.', 'gear'],
@@ -24,3 +24,5 @@ export const stages: Stage[] = [
     visualReference: 'Imagem de referência a fornecer. O ícone é ilustrativo.',
   }],
 }))
+
+export const stages: Stage[] = [coleta, torre, equipamentos, ...provisionalStages]
