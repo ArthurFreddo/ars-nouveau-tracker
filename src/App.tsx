@@ -43,7 +43,7 @@ export default function App() {
           </div>
         </div>
         <ProgressBar completed={stageCompleted} total={stage.tasks.length} label="Progresso da etapa" />
-        <div className="activity-toolbar"><span>{stageDone ? '✦ Etapa concluída' : `${stage.tasks.length - stageCompleted} atividades pendentes`}</span><label className="pending-filter"><input type="checkbox" checked={pendingOnly} onChange={event => setPendingOnly(event.target.checked)} /><span>Mostrar só pendentes</span></label></div>
+        <div className="activity-toolbar"><span>{stageDone ? '✦ Etapa concluída' : `${stage.tasks.length - stageCompleted} ${stage.tasks.length - stageCompleted === 1 ? 'atividade pendente' : 'atividades pendentes'}`}</span><label className="pending-filter"><input type="checkbox" checked={pendingOnly} onChange={event => setPendingOnly(event.target.checked)} /><span>Mostrar só pendentes</span></label></div>
         {stage.provisional && <p className="provisional-note">✦ Conteúdo provisório · atividades reais a fornecer</p>}
         <div className="activities">{visibleTasks.map(task => <ActivityCard key={task.id} task={task} number={stage.tasks.indexOf(task) + 1} completed={completed.has(task.id)} onToggle={() => toggle(task.id)} />)}</div>
         {visibleTasks.length === 0 && <div className="empty-state"><GameIcon name="crystal" /><h3>Tudo concluído nesta etapa!</h3><p>Desative o filtro para rever suas atividades.</p>{stages.indexOf(stage) < stages.length - 1 && <button onClick={() => setSelected(stages[stages.indexOf(stage) + 1].id)}>Ir para a próxima etapa →</button>}</div>}
