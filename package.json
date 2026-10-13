@@ -11,12 +11,17 @@
   "dependencies": {
     "@fontsource/nunito-sans": "^5.2.0",
     "@fontsource/pixelify-sans": "^5.2.0",
+    "@tsparticles/engine": "^4.4.0",
+    "@tsparticles/react": "^4.4.0",
+    "@tsparticles/slim": "^4.4.0",
+    "canvas-confetti": "^1.9.4",
     "motion": "^14.2.0",
     "pixelarticons": "^1.8.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
