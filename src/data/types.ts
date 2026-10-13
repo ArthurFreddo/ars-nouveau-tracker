@@ -1,11 +1,12 @@
-export type IconName = 'pickaxe' | 'tower' | 'book' | 'crystal' | 'creature' | 'gear' | 'blocks' | 'ingot' | 'berries' | 'tree' | 'chamber' | 'table'
+export type IconName = 'pickaxe' | 'tower' | 'book' | 'crystal' | 'creature' | 'gear' | 'blocks' | 'ingot' | 'berries' | 'tree' | 'chamber' | 'table' | 'sourcelink' | 'jar' | 'starbuncle' | 'token' | 'sourcestone' | 'apparatus' | 'pedestal' | 'charm' | 'wand' | 'chest' | 'gemblock' | 'relay'
 export interface ContentSection {
   title: string
   paragraphs?: string[]
   items?: string[]
   ordered?: boolean
   table?: { headers: string[]; rows: string[][] }
-  recipe?: { cells: string[]; output: string; note: string }
+  recipe?: { cells: string[]; output: string; note: string; quantity?: number }
+  apparatus?: { pedestals: string[]; reagent: string; output: string; sourceCost: number; note: string }
   code?: string
 }
 export interface Activity {
@@ -17,6 +18,7 @@ export interface Activity {
   sections: ContentSection[]
   conclusion: string
   visualReference: string
+  showReferenceOnCard?: boolean
   sources?: { label: string; url: string }[]
 }
 export interface Stage {

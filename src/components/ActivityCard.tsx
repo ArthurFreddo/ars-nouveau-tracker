@@ -19,6 +19,7 @@ export function ActivityCard({ task, number, completed, onToggle, expanded, onEx
       <div className="activity-copy">
         <div className="task-meta"><span className="task-number">ATIVIDADE {String(number).padStart(2, '0')}</span>{task.location && <span className="task-location">{task.location}</span>}{completed && <span className="completed-badge"><PixelIcon name="check" />Concluída</span>}</div>
         <h3>{task.title}</h3><p>{task.summary}</p>
+        {task.showReferenceOnCard && <p className="card-reference"><span>Referência visual:</span> {task.visualReference}</p>}
         <button className="expand-button" onClick={onExpand} aria-expanded={expanded} aria-controls={detailId}>
           <PixelIcon name="book" />{expanded ? 'Fechar anotações' : 'Ver detalhes'}
           <motion.span className="expand-chevron" animate={{ rotate: expanded ? 180 : 0 }} transition={{ duration: reducedMotion ? 0 : .18 }}><PixelIcon name="chevron" /></motion.span>

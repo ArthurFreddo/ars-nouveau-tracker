@@ -25,7 +25,7 @@ export default function App() {
   const celebrationTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   useEffect(() => { if (!animated) stopCompletionMagic() }, [animated])
   useEffect(() => () => { clearTimeout(celebrationTimer.current); stopCompletionMagic() }, [])
-  const stage = stages.find(item => item.id === selected)!
+  const stage = stages.find(item => item.id === selected) ?? stages[0]
   const stageIndex = stages.indexOf(stage)
   const allTasks = stages.flatMap(item => item.tasks)
   const total = allTasks.length
@@ -146,7 +146,7 @@ export default function App() {
             <ProgressBar completed={completedCount} total={total} label="Resumo do progresso" />
             <dl><div><dt><i className="status-square green" />Concluídas</dt><dd>{completedCount}</dd></div><div><dt><i className="status-square" />Pendentes</dt><dd>{total - completedCount}</dd></div><div><dt><i className="status-square violet" />Total</dt><dd>{total}</dd></div></dl>
             <p className="stages-stat">{completedStages} de 8 etapas completas · {percent}% da jornada</p>
-            <p className="summary-note">{total - provisionalCount} atividades do roteiro · {provisionalCount} provisórias<br />As demonstrações também entram no total.</p>
+            <p className="summary-note">{total - provisionalCount} atividades do roteiro · {provisionalCount} {provisionalCount === 1 ? 'provisória' : 'provisórias'}<br />{provisionalCount === 1 ? 'A demonstração também entra no total.' : 'As demonstrações também entram no total.'}</p>
           </section>
           <section className="next-task-panel"><div className="eyebrow">{stageDone ? 'ETAPA COMPLETA' : 'SEU PRÓXIMO PASSO'}</div>{nextTask ? <><GameIcon name={nextTask.icon} /><h3>{nextTask.title}</h3><p>Etapa {stageIndex + 1} · {stage.name}</p><button className="primary-button" onClick={openNextTask}>Abrir próxima atividade <PixelIcon name="arrow" /></button></> : <><GameIcon name="crystal" /><h3>Tudo pronto por aqui.</h3><p>{stageIndex < 7 ? 'Continue para a próxima etapa do grimório.' : 'Sua jornada está completa.'}</p>{stageIndex < 7 && <button className="primary-button" onClick={() => setSelected(stages[stageIndex + 1].id)}>Próxima etapa <PixelIcon name="arrow" /></button>}</>}</section>
           <section className="journal-panel"><span className="journal-star">✦</span><blockquote>Todo grande feitiço começa com um único ponto de Source.</blockquote><p>ARS NOUVEAU</p></section>
