@@ -287,7 +287,8 @@ h4 { color: #ead6a5; }.material-list li { background: #12231dda; border-color: #
 .journal-panel { background: linear-gradient(#11291fe5, #18251fea), var(--stone); border-color: #6d7762 #374c38 #263925 #586947; }
 .journal-panel blockquote { color: #d4d4b8; }.journal-panel p { color: #9dbaa0; }
 .companions-panel { position: relative; overflow: hidden; text-align: center; padding: 14px 15px 10px; background: radial-gradient(ellipse at 50% 45%, #ac8b5630, transparent 70%), #12231cb8; border: 1px solid #95866077; }
-.companions-panel .eyebrow { font-size: 8px; letter-spacing: 1px; }.companions-panel > img { display: block; width: 190px; height: 175px; margin: 4px auto; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(3px 6px 4px #03090799); }
+.companions-panel .eyebrow { font-size: 8px; letter-spacing: 1px; }.companions-panel > img { display: block; width: 100%; max-width: 260px; height: 240px; margin: 6px auto 2px; object-fit: contain; image-rendering: pixelated; filter: drop-shadow(3px 6px 4px #03090799); }
+.companions-caption { margin: 0 0 10px; color: #c5c7ab; font-size: 10px; }
 .companions-panel .text-button { display: inline-flex; align-items: center; gap: 9px; color: #dacb9d; font-size: 10px; }
 .grimoire-decoration { position: relative; min-height: 230px; padding: 0; overflow: visible; margin-top: -6px; }
 .grimoire-decoration .book-props { width: 220px; height: 220px; object-fit: contain; margin-left: auto; display: block; }
@@ -307,7 +308,7 @@ h4 { color: #ead6a5; }.material-list li { background: #12231dda; border-color: #
   .hero { min-height: 265px; }.hero-copy { padding: 34px 150px 24px 74px; }.hero-emblem { top: 78px; }.hero-emblem .game-icon { width: 60px; height: 60px; }.hero h1 { font-size: 37px; }
   .hero-portrait { width: 190px; right: -21px; height: 280px; opacity: .88; }.hero-kicker { font-size: 7px; letter-spacing: .6px; gap: 5px; }.hero-subtitle { font-size: 16px; }.hero-subtitle > span { margin: 0; }
   .magic-toggle { left: 74px; }.hero-progress { margin-top: 16px; }.hero .progress-wrap { flex-wrap: wrap; }.hero .progress-count { padding: 4px 8px; width: 100%; justify-content: space-between; }
-  .companions-panel { grid-column: 1 / -1; }.companions-panel > img { width: 210px; height: 180px; }.grimoire-decoration { min-height: 205px; }
+  .companions-panel { grid-column: 1 / -1; }.companions-panel > img { width: 100%; max-width: 260px; height: 250px; }.grimoire-decoration { min-height: 205px; }
 }
 @media (max-width: 600px) {
   body { background-position: 61% top; }.tracker { padding-top: 18px; }.hero { min-height: 280px; }.hero-shade { inset: -18px -13px 0; }

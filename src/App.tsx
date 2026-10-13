@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, MotionConfig, motion, useReducedMotion, usePageInView } from 'motion/react'
 import { stages } from './data/stages'
+import { beatrizPortraits, companionArtwork } from './data/artwork'
 import { GameIcon } from './components/GameIcon'
 import { ProgressBar } from './components/ProgressBar'
 import { ActivityCard } from './components/ActivityCard'
@@ -15,6 +16,7 @@ export default function App() {
   const [selected, setSelected] = useState(stages[0].id)
   const [pendingOnly, setPendingOnly] = useState(false)
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set())
+  const [portraitOffset] = useState(() => Math.floor(Math.random() * beatrizPortraits.length))
   const { completed, toggle, saved } = useProgress()
   const reducedMotion = useReducedMotion()
   const pageVisible = usePageInView()
@@ -38,6 +40,9 @@ export default function App() {
   const nextTask = stage.tasks.find(task => !completed.has(task.id))
   const completedStages = stages.filter(item => item.tasks.every(task => completed.has(task.id))).length
   const provisionalCount = stages.filter(item => item.provisional).flatMap(item => item.tasks).length
+  const portrait = beatrizPortraits[(portraitOffset + stageIndex + completedCount) % beatrizPortraits.length]
+  const creaturesCompleted = stages[4].tasks.filter(task => completed.has(task.id)).length
+  const companions = creaturesCompleted >= Math.ceil(stages[4].tasks.length / 2) ? companionArtwork.magic : companionArtwork.garden
 
   function toggleActivity(id: string, target: HTMLElement) {
     const completing = !completed.has(id)
@@ -85,9 +90,8 @@ export default function App() {
       <header className="hero">
         <div className="hero-shade" />
         <motion.div className="hero-aura" aria-hidden="true" animate={{ opacity: animated ? [.35, .65, .35] : .45 }} transition={{ duration: 5, repeat: animated ? Infinity : 0, ease: 'easeInOut' }} />
-        <AnimatePresence mode="wait" initial={false}><motion.img key={stageIndex === 2 ? 'front' : 'back'} className="hero-portrait"
-          src={stageIndex === 2 ? '/images/beatriz-mage.png' : '/images/beatriz-cloaked-v4.png'}
-          alt={stageIndex === 2 ? 'Beatriz com seu grimório e um cristal violeta.' : 'Beatriz vista de costas, com cabelos vermelhos, manto de maga verde escuro e poções no cinto.'}
+        <AnimatePresence mode="wait" initial={false}><motion.img key={portrait.id} className="hero-portrait"
+          src={portrait.src} alt={portrait.alt}
           initial={animated ? { opacity: 0, x: 12 } : false} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} transition={{ duration: animated ? .35 : 0 }} /></AnimatePresence>
         <motion.div className="hero-emblem" aria-hidden="true" animate={{ y: animated ? [0, -9, 0] : 0, rotate: animated ? [-2, 2, -2] : 0 }} transition={{ duration: 5, repeat: animated ? Infinity : 0, ease: 'easeInOut' }}><img className="game-icon" src="/images/enchanted-book-emblem-v3.png" alt="" /></motion.div>
         <div className="hero-copy">
@@ -96,7 +100,7 @@ export default function App() {
           <p className="hero-subtitle"><span>✦</span> Diário de progressão mágica <span>✦</span></p>
           <div className="hero-progress"><ProgressBar completed={completedCount} total={total} label="Progresso geral" /></div>
         </div>
-        <div className="hero-art-label"><span>BEATRIZ</span><small>EDIÇÃO ARCANA · TGT</small></div>
+        <div className="hero-art-label" title="A pose muda ao trocar de etapa ou atualizar o progresso."><span>BEATRIZ</span><small>{portrait.label}</small></div>
         <button className="magic-toggle" aria-pressed={magicPaused} onClick={() => setMagicPaused(value => !value)} title={reducedMotion ? "O movimento reduzido está ativo no sistema." : undefined}><span aria-hidden="true">{animated ? "✦" : "◇"}</span>{reducedMotion ? "Movimento reduzido" : magicPaused ? "Ativar efeitos" : "Pausar efeitos"}</button>
         <div className="masthead-meta"><span className="version-tag">JAVA <b>1.20.1</b></span><span className={saved ? 'save-status' : 'save-status save-error'} role="status"><i />{saved ? 'Progresso salvo' : 'Salvamento indisponível'}</span></div>
       </header>
@@ -151,8 +155,10 @@ export default function App() {
           <section className="next-task-panel"><div className="eyebrow">{stageDone ? 'ETAPA COMPLETA' : 'SEU PRÓXIMO PASSO'}</div>{nextTask ? <><GameIcon name={nextTask.icon} /><h3>{nextTask.title}</h3><p>Etapa {stageIndex + 1} · {stage.name}</p><button className="primary-button" onClick={openNextTask}>Abrir próxima atividade <PixelIcon name="arrow" /></button></> : <><GameIcon name="crystal" /><h3>Tudo pronto por aqui.</h3><p>{stageIndex < 7 ? 'Continue para a próxima etapa do grimório.' : 'Sua jornada está completa.'}</p>{stageIndex < 7 && <button className="primary-button" onClick={() => setSelected(stages[stageIndex + 1].id)}>Próxima etapa <PixelIcon name="arrow" /></button>}</>}</section>
           <section className="journal-panel"><span className="journal-star">✦</span><blockquote>Todo grande feitiço começa com um único ponto de Source.</blockquote><p>ARS NOUVEAU</p></section>
           <section className="companions-panel"><div className="eyebrow">COMPANHEIROS DO GRIMÓRIO</div>
-            <motion.img src="/images/arcane-familiars-v4.png" alt="Ilustração inspirada em um Starbuncle e um Whirlisprig." loading="lazy"
-              animate={{ y: animated ? [0, -6, 0] : 0 }} transition={{ duration: 4, repeat: animated ? Infinity : 0, ease: 'easeInOut' }} />
+            <AnimatePresence mode="wait" initial={false}><motion.img key={companions.id} src={companions.src} alt={companions.alt} loading="lazy"
+              initial={animated ? { opacity: 0 } : false} animate={{ opacity: 1, y: animated ? [0, -6, 0] : 0 }} exit={{ opacity: 0 }}
+              transition={{ opacity: { duration: animated ? .3 : 0 }, y: { duration: 4, repeat: animated ? Infinity : 0, ease: 'easeInOut' } }} /></AnimatePresence>
+            <p className="companions-caption">Beatriz, Starbuncle e Whirlisprig</p>
             <button className="text-button" onClick={() => { setSelected(stages[4].id); document.querySelector(".stage-nav")?.scrollIntoView({ behavior: animated ? "smooth" : "instant", block: "start" }) }}>Visitar criaturas <PixelIcon name="arrow" /></button>
           </section>
           <div className="grimoire-decoration" aria-hidden="true"><motion.img className="potion-props" src="/images/alchemy-potions-v4.png" alt="" loading="lazy" animate={{ y: animated ? [0, -4, 0] : 0 }} transition={{ duration: 6, repeat: animated ? Infinity : 0, ease: 'easeInOut' }} /><img className="book-props" src="/images/enchanted-grimoire-v3.png" alt="" loading="lazy" /></div>
