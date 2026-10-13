@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { stages } from './data/stages'
 import { GameIcon } from './components/GameIcon'
 import { ProgressBar } from './components/ProgressBar'
+import { ActivityCard } from './components/ActivityCard'
 
 export default function App() {
   const [selected, setSelected] = useState(stages[0].id)
@@ -34,9 +35,7 @@ export default function App() {
         </div>
         <ProgressBar completed={0} total={stage.tasks.length} label="Progresso da etapa" />
         {stage.provisional && <p className="provisional-note">✦ Conteúdo provisório · atividades reais a fornecer</p>}
-        <div className="activities">{stage.tasks.map((task, index) => <article className="activity" key={task.id}>
-          <div className="item-slot"><GameIcon name={task.icon} /></div><div className="activity-copy"><span className="task-number">ATIVIDADE {String(index + 1).padStart(2, '0')}</span><h3>{task.title}</h3><p>{task.summary}</p></div>
-        </article>)}</div>
+        <div className="activities">{stage.tasks.map((task, index) => <ActivityCard key={task.id} task={task} number={index + 1} completed={false} onToggle={() => {}} />)}</div>
       </section>
       <aside className="sidebar">
         <section className="summary-panel wood-frame"><h2>Progresso geral</h2><ProgressBar completed={0} total={total} label="Resumo geral" />
