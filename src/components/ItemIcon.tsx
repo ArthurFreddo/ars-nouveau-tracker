@@ -1,8 +1,39 @@
-type ItemVisual = { src: string; block?: 'planks' | 'log' | 'slab' | 'cube' }
+type ItemVisual = { src: string; overlay?: string; block?: 'planks' | 'log' | 'slab' | 'cube' }
 const items = '/images/items/'
 
 export function itemVisual(label: string): ItemVisual | undefined {
   label = label.replace(/\s*\(.*$/, '').split(' — ')[0]
+  const essence = label.match(/\b(air|fire|water|earth|abjuration|conjuration|manipulation) essence/i)
+  if (essence) return { src: items + essence[1].toLowerCase() + '_essence.png' }
+  if (/magebloom fibers?/i.test(label)) return { src: items + 'magebloom_fiber.png' }
+  if (/magebloom seeds?/i.test(label)) return { src: items + 'magebloom_seed.png' }
+  if (/mageblooms?/i.test(label)) return { src: items + 'magebloom.png' }
+  if (/magic capacity thread|thread: magic capacity/i.test(label)) return { src: items + 'thread_magic_capacity.png' }
+  if (/blank thread/i.test(label)) return { src: items + 'blank_thread.png' }
+  if (/wilden wings?/i.test(label)) return { src: items + 'wilden_wing.png' }
+  if (/wilden horns?/i.test(label)) return { src: items + 'wilden_horn.png' }
+  if (/wilden tribute/i.test(label)) return { src: items + 'wilden_tribute.png' }
+  if (/battlemage/i.test(label)) return { src: items + 'battlemage_gambeson_tint.png', overlay: items + 'battlemage_gambeson_gold.png' }
+  if (/diamond chestplate|peça de armadura de diamante/i.test(label)) return { src: items + 'diamond_chestplate.png' }
+  if (/alteration table/i.test(label)) return { src: '/images/table.svg' }
+  if (/fermented spider eye/i.test(label)) return { src: items + 'fermented_spider_eye.png' }
+  if (/golden apple/i.test(label)) return { src: items + 'golden_apple.png' }
+  if (/wheat seeds|semente.*compatível/i.test(label)) return { src: items + 'wheat_seeds.png' }
+  if (/stone button/i.test(label)) return { src: items + 'stone_button.png', block: 'slab' }
+  if (/snow block/i.test(label)) return { src: items + 'snow.png', block: 'cube' }
+  if (/\bdirt\b|bloco de terra/i.test(label)) return { src: items + 'dirt.png', block: 'cube' }
+  if (/obsidian/i.test(label)) return { src: items + 'obsidian.png', block: 'cube' }
+  if (/quartz blocks?/i.test(label)) return { src: items + 'quartz_block.png', block: 'cube' }
+  const simpleItems: [RegExp, string][] = [
+    [/lantern|lanterna/i, 'lantern'], [/torch|tocha/i, 'torch'], [/feathers?|penas?/i, 'feather'],
+    [/\barrows?\b/i, 'arrow'], [/flint and steel/i, 'flint_and_steel'], [/gunpowder/i, 'gunpowder'],
+    [/water bucket/i, 'water_bucket'], [/milk bucket/i, 'milk_bucket'], [/kelp/i, 'kelp'],
+    [/sugar/i, 'sugar'], [/redstone/i, 'redstone'], [/clock/i, 'clock'],
+    [/blaze rods?/i, 'blaze_rod'], [/ender pearls?/i, 'ender_pearl'], [/emeralds?/i, 'emerald'],
+    [/totem of undying/i, 'totem_of_undying'], [/nether star/i, 'nether_star'],
+  ]
+  const simple = simpleItems.find(([match]) => match.test(label))
+  if (simple) return { src: items + simple[1] + '.png' }
   if (/novice spell book|spell book/i.test(label)) return { src: '/images/book.svg' }
   if (/scribe.*table/i.test(label)) return { src: '/images/table.svg' }
   if (/imbuement chamber/i.test(label)) return { src: '/images/chamber.svg' }
@@ -50,6 +81,7 @@ export function itemVisual(label: string): ItemVisual | undefined {
 export function ItemIcon({ label, className = '' }: { label: string; className?: string }) {
   const visual = itemVisual(label)
   if (!visual) return null
+  if (visual.overlay) return <span className={`item-icon layered-item ${className}`} aria-hidden="true"><img src={visual.src} alt="" /><img src={visual.overlay} alt="" /></span>
   if (!visual.block) return <img className={`item-icon ${className}`} src={visual.src} alt="" aria-hidden="true" />
   const top = visual.block === 'log' ? items + 'archwood_log_top.png' : visual.src
   return <span className={`block-item ${visual.block} ${className}`} aria-hidden="true">

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react'
 import type { Activity } from '../data/types'
 import { GameIcon } from './GameIcon'
+import { ItemIcon } from './ItemIcon'
 import { PixelIcon } from './PixelIcon'
 import { ContentSections } from './ContentSections'
 import { useMagicMotion } from './MagicPreferences'
@@ -15,7 +16,7 @@ export function ActivityCard({ task, number, completed, onToggle, expanded, onEx
     layout={animated ? 'position' : false} initial={animated ? { opacity: 0, y: 12 } : false} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: animated ? .97 : 1 }}
     transition={{ opacity: { duration: animated ? .25 : 0, delay: animated ? (number - 1) * .045 : 0 }, y: { duration: animated ? .3 : 0, delay: animated ? (number - 1) * .045 : 0 }, layout: { duration: animated ? .25 : 0 } }}>
     <div className="activity-top">
-      <div className="item-slot"><GameIcon name={task.icon} /></div>
+      <div className="item-slot">{task.iconItem ? <ItemIcon label={task.iconItem} className="game-icon" /> : <GameIcon name={task.icon} />}</div>
       <div className="activity-copy">
         <div className="task-meta"><span className="task-number">ATIVIDADE {String(number).padStart(2, '0')}</span>{task.location && <span className="task-location">{task.location}</span>}{completed && <span className="completed-badge"><PixelIcon name="check" />Concluída</span>}</div>
         <h3>{task.title}</h3><p>{task.summary}</p>

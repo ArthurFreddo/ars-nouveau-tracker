@@ -1,0 +1,8 @@
+export const towerRooms = [
+  { id: 'recepcao', level: '1', short: 'Recepção', title: 'Térreo · Recepção e armazenamento', src: '/images/tower/beatriz-recepcao-v1.png', alt: 'Beatriz na recepção da torre, com bancada, baús, fornalhas e lanternas.', taskId: 'torre-terreo' },
+  { id: 'biblioteca', level: '2', short: 'Biblioteca', title: '2º andar · Biblioteca e estudos', src: '/images/tower/beatriz-biblioteca-v1.png', alt: 'Beatriz estudando um grimório na biblioteca da torre, entre estantes e bancadas.', taskId: 'torre-biblioteca' },
+  { id: 'logistica', level: '3', short: 'Logística', title: '3º andar · Automação e logística', src: '/images/tower/beatriz-logistica-v1.png', alt: 'Beatriz junto de um Starbuncle e um Whirlisprig no salão de logística da torre.', taskId: 'torre-automacao' },
+  { id: 'observatorio', level: '4', short: 'Observatório', title: '4º andar · Observatório e rituais', src: '/images/tower/beatriz-observatorio-v1.png', alt: 'Beatriz com seu longo manto, vista de costas no observatório da torre sob um céu estrelado.', taskId: 'torre-rituais' },
+  { id: 'imbuicao', level: '−1', short: 'Imbuição', title: 'Subsolo · Ala de imbuição', src: '/images/tower/beatriz-imbuicao-v1.png', alt: 'Beatriz examinando uma Source Gem na ala de imbuição do laboratório subterrâneo.', taskId: 'torre-subsolo' },
+  { id: 'encantamento', level: '−1', short: 'Encantamentos', title: 'Subsolo · Ala de encantamentos', src: '/images/tower/beatriz-encantamento-v1.png', alt: 'Beatriz inspecionando uma armadura na ala de encantamentos do laboratório subterrâneo.', taskId: 'torre-subsolo' },
+] as const

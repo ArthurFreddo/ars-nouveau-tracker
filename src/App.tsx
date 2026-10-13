@@ -10,14 +10,23 @@ import { useProgress } from './useProgress'
 import { ContentSections } from './components/ContentSections'
 import { MagicPreferences } from './components/MagicPreferences'
 import { celebrateCompletion, stopCompletionMagic } from './components/completionMagic'
+import { MageProgressEntry, MageProgressPanel } from './components/MageProgress'
+import { EssenceGuide } from './components/EssenceGuide'
+import { TowerRooms } from './components/TowerRooms'
+import { mageTasks } from './data/mage'
+import { magePortraitFor } from './data/mageArtwork'
 const ArcaneAtmosphere = lazy(() => import('./components/ArcaneAtmosphere'))
+const mageIds = new Set(mageTasks.map(task => task.id))
 
 export default function App() {
   const [selected, setSelected] = useState(stages[0].id)
+  const [view, setView] = useState<'tower' | 'mage'>('tower')
+  const [essenceOpen, setEssenceOpen] = useState(false)
   const [pendingOnly, setPendingOnly] = useState(false)
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set())
   const [portraitOffset] = useState(() => Math.floor(Math.random() * beatrizPortraits.length))
   const { completed, toggle, saved } = useProgress()
+  const { completed: mageCompleted, toggle: toggleMage, saved: mageSaved } = useProgress('ars-nouveau-tracker:mage:v1', mageIds)
   const reducedMotion = useReducedMotion()
   const pageVisible = usePageInView()
   const [magicPaused, setMagicPaused] = useState(false)
@@ -40,7 +49,8 @@ export default function App() {
   const nextTask = stage.tasks.find(task => !completed.has(task.id))
   const completedStages = stages.filter(item => item.tasks.every(task => completed.has(task.id))).length
   const provisionalCount = stages.filter(item => item.provisional).flatMap(item => item.tasks).length
-  const portrait = beatrizPortraits[(portraitOffset + stageIndex + completedCount) % beatrizPortraits.length]
+  const magePercent = Math.round(mageTasks.filter(task => mageCompleted.has(task.id)).length / mageTasks.length * 100)
+  const portrait = view === 'mage' ? magePortraitFor(magePercent) : beatrizPortraits[(portraitOffset + stageIndex + completedCount) % beatrizPortraits.length]
   const creaturesCompleted = stages[4].tasks.filter(task => completed.has(task.id)).length
   const companions = creaturesCompleted >= Math.ceil(stages[4].tasks.length / 2) ? companionArtwork.magic : companionArtwork.garden
 
@@ -79,9 +89,17 @@ export default function App() {
   }
   function openNextTask() {
     if (!nextTask) return
-    requestedTaskFocus.current = nextTask.id
-    setExpandedTasks(previous => new Set([...previous, nextTask.id]))
+    openTask(nextTask.id)
+  }
+  function openTask(id: string) {
+    requestedTaskFocus.current = id
+    setPendingOnly(false)
+    setExpandedTasks(previous => new Set([...previous, id]))
     requestAnimationFrame(focusRequestedTask)
+  }
+  function openMage() {
+    setView('mage')
+    requestAnimationFrame(() => document.getElementById('mage-progress')?.scrollIntoView({ behavior: animated ? 'smooth' : 'instant', block: 'start' }))
   }
 
   return <MagicPreferences value={animated}><MotionConfig reducedMotion={animated ? "user" : "always"}>
@@ -98,21 +116,23 @@ export default function App() {
           <div className="hero-kicker"><span>✧</span> O GRIMÓRIO DE BEATRIZ <i /> EDIÇÃO ARCANA</div>
           <h1>Ars Nouveau <span>Progress Tracker</span></h1>
           <p className="hero-subtitle"><span>✦</span> Diário de progressão mágica <span>✦</span></p>
-          <div className="hero-progress"><ProgressBar completed={completedCount} total={total} label="Progresso geral" /></div>
+          <div className="hero-progress"><ProgressBar completed={completedCount} total={total} label="Progresso da torre" /></div>
         </div>
-        <div className="hero-art-label" title="A pose muda ao trocar de etapa ou atualizar o progresso."><span>BEATRIZ</span><small>{portrait.label}</small></div>
+        <div className="hero-art-label" title={view === 'mage' ? 'O retrato evolui com o progresso do mago.' : 'A pose muda ao trocar de etapa ou atualizar o progresso.'}><span>BEATRIZ</span><small>{portrait.label}</small></div>
         <button className="magic-toggle" aria-pressed={magicPaused} onClick={() => setMagicPaused(value => !value)} title={reducedMotion ? "O movimento reduzido está ativo no sistema." : undefined}><span aria-hidden="true">{animated ? "✦" : "◇"}</span>{reducedMotion ? "Movimento reduzido" : magicPaused ? "Ativar efeitos" : "Pausar efeitos"}</button>
         <div className="masthead-meta"><span className="version-tag">JAVA <b>1.20.1</b></span><span className={saved ? 'save-status' : 'save-status save-error'} role="status"><i />{saved ? 'Progresso salvo' : 'Salvamento indisponível'}</span></div>
       </header>
+
+      <MageProgressEntry completed={mageCompleted} saved={mageSaved} active={view === 'mage'} onOpen={openMage} onEssences={() => setEssenceOpen(true)} />
 
       <nav className="stage-nav wood-frame" aria-label="Etapas da jornada">
         {stages.map((item, index) => {
           const count = item.tasks.filter(task => completed.has(task.id)).length
           const done = count === item.tasks.length
-          return <motion.button key={item.id} aria-current={selected === item.id ? 'step' : undefined}
-            className={`stage-tab ${selected === item.id ? 'active' : ''} ${done ? 'done' : ''}`}
-            onClick={() => setSelected(item.id)} whileHover={!animated ? undefined : { y: -2 }} whileTap={!animated ? undefined : { scale: .97 }}>
-            {selected === item.id && <motion.span className="tab-sigil" layoutId="active-chapter" transition={{ type: "spring", stiffness: 350, damping: 32, duration: animated ? undefined : 0 }} aria-hidden="true" />}
+          return <motion.button key={item.id} aria-current={view === 'tower' && selected === item.id ? 'step' : undefined}
+            className={`stage-tab ${view === 'tower' && selected === item.id ? 'active' : ''} ${done ? 'done' : ''}`}
+            onClick={() => { setSelected(item.id); setView('tower') }} whileHover={!animated ? undefined : { y: -2 }} whileTap={!animated ? undefined : { scale: .97 }}>
+            {view === 'tower' && selected === item.id && <motion.span className="tab-sigil" layoutId="active-chapter" transition={{ type: "spring", stiffness: 350, damping: 32, duration: animated ? undefined : 0 }} aria-hidden="true" />}
             <span className="tab-index">{String(index + 1).padStart(2, '0')}</span>
             <GameIcon name={item.icon} /><span className="tab-name">{item.name}</span>
             <span className="tab-count">{done ? <><PixelIcon name="check" />Concluída</> : item.provisional ? 'Provisória' : `${count} / ${item.tasks.length}`}</span>
@@ -121,7 +141,7 @@ export default function App() {
         })}
       </nav>
 
-      <div className="workspace">
+      {view === 'mage' ? <MageProgressPanel completed={mageCompleted} saved={mageSaved} onToggle={toggleMage} onBack={() => setView('tower')} onEssences={() => setEssenceOpen(true)} /> : <div className="workspace">
         <AnimatePresence mode="wait" initial={false}><motion.section key={stage.id} className="stage-panel wood-frame" aria-labelledby="stage-title" onAnimationComplete={focusRequestedTask}
           initial={animated ? { opacity: 0, y: 16 } : false} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: animated ? -8 : 0 }} transition={{ duration: animated ? .28 : 0, ease: [.22, 1, .36, 1] }}>
           <div className="stage-intro"><div className="stage-heading">
@@ -129,6 +149,7 @@ export default function App() {
             <div className="stage-heading-copy"><div className="eyebrow">CAPÍTULO {String(stageIndex + 1).padStart(2, '0')} <span>·</span> {stage.difficulty}</div><h2 id="stage-title">{stage.title}</h2><p>{stage.description}</p></div>
           </div>
           <div className="stage-progress"><ProgressBar completed={stageCompleted} total={stage.tasks.length} label="Progresso da etapa" /></div></div>
+          {stage.id === stages[1].id && <TowerRooms onOpenTask={openTask} />}
           <div className="activity-toolbar"><h3>{stageDone ? <><PixelIcon name="check" />Etapa concluída</> : <>Suas atividades <span>{remaining} {remaining === 1 ? 'pendente' : 'pendentes'}</span></>}</h3>
             <label className="pending-filter"><input type="checkbox" checked={pendingOnly} onChange={event => setPendingOnly(event.target.checked)} /><span className="filter-switch" aria-hidden="true" /><span>Só pendentes</span></label>
           </div>
@@ -146,7 +167,7 @@ export default function App() {
         </motion.section></AnimatePresence>
 
         <aside className="sidebar">
-          <section className="summary-panel wood-frame"><div className="panel-heading"><h2>Progresso geral</h2><GameIcon name="crystal" /></div>
+          <section className="summary-panel wood-frame"><div className="panel-heading"><h2>Progresso da torre</h2><GameIcon name="crystal" /></div>
             <ProgressBar completed={completedCount} total={total} label="Resumo do progresso" />
             <dl><div><dt><i className="status-square green" />Concluídas</dt><dd>{completedCount}</dd></div><div><dt><i className="status-square" />Pendentes</dt><dd>{total - completedCount}</dd></div><div><dt><i className="status-square violet" />Total</dt><dd>{total}</dd></div></dl>
             <p className="stages-stat">{completedStages} de 8 etapas completas · {percent}% da jornada</p>
@@ -164,7 +185,9 @@ export default function App() {
           <div className="grimoire-decoration" aria-hidden="true"><motion.img className="potion-props" src="/images/alchemy-potions-v4.png" alt="" loading="lazy" animate={{ y: animated ? [0, -4, 0] : 0 }} transition={{ duration: 6, repeat: animated ? Infinity : 0, ease: 'easeInOut' }} /><img className="book-props" src="/images/enchanted-grimoire-v3.png" alt="" loading="lazy" /></div>
           <p className={`local-note ${saved ? '' : 'save-error'}`}><PixelIcon name="save" />{saved ? 'Salvo automaticamente neste navegador.' : 'As marcações ficarão apenas nesta sessão.'}</p>
         </aside>
-      </div>
+      </div>}
+      <button className="essence-shortcut" onClick={() => setEssenceOpen(true)} aria-label="Consultar essências de qualquer tela"><PixelIcon name="book" />Essências</button>
+      <EssenceGuide open={essenceOpen} onClose={() => setEssenceOpen(false)} />
       <div className="completion-announcement" role="status" aria-live="polite"><AnimatePresence>{celebration && <motion.div className="completion-toast" key={celebration.id} initial={animated ? { opacity: 0, y: 24, scale: .96 } : false} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: animated ? 12 : 0 }} transition={{ duration: animated ? .25 : 0 }}><GameIcon name="crystal" /><div><strong>{celebration.chapterComplete ? 'Capítulo completo!' : 'Atividade concluída'}</strong><span>{celebration.title}</span></div><PixelIcon name="check" /></motion.div>}</AnimatePresence></div>
       <footer><span><span>✦</span> Ars Nouveau · Minecraft 1.20.1</span><span>Feito para descobrir, construir e lembrar.</span></footer>
     </main>

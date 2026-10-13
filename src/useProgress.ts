@@ -1,23 +1,23 @@
 import { useEffect, useState } from 'react'
 import { stages } from './data/stages'
 
-const storageKey = 'ars-nouveau-tracker:v1'
-const validIds = new Set(stages.flatMap(stage => stage.tasks.map(task => task.id)))
+const towerStorageKey = 'ars-nouveau-tracker:v1'
+const towerValidIds = new Set(stages.flatMap(stage => stage.tasks.map(task => task.id)))
 
-function readProgress(): Set<string> {
+function readProgress(storageKey: string, validIds: ReadonlySet<string>): Set<string> {
   try {
     const value: unknown = JSON.parse(localStorage.getItem(storageKey) ?? '[]')
     return new Set(Array.isArray(value) ? value.filter((id): id is string => typeof id === 'string' && validIds.has(id)) : [])
   } catch { return new Set() }
 }
 
-export function useProgress() {
-  const [completed, setCompleted] = useState(readProgress)
+export function useProgress(storageKey = towerStorageKey, validIds: ReadonlySet<string> = towerValidIds) {
+  const [completed, setCompleted] = useState(() => readProgress(storageKey, validIds))
   const [saved, setSaved] = useState(true)
   useEffect(() => {
     try { localStorage.setItem(storageKey, JSON.stringify([...completed])); setSaved(true) }
     catch { setSaved(false) }
-  }, [completed])
+  }, [completed, storageKey])
   function toggle(id: string) {
     setCompleted(previous => {
       const next = new Set(previous)

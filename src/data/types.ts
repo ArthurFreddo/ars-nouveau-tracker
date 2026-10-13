@@ -6,7 +6,7 @@ export interface ContentSection {
   ordered?: boolean
   table?: { headers: string[]; rows: string[][] }
   recipe?: { cells: string[]; output: string; note: string; quantity?: number }
-  apparatus?: { pedestals: string[]; reagent: string; output: string; sourceCost: number; note: string }
+  apparatus?: { pedestals: string[]; reagent: string; output: string; sourceCost?: number; note: string }
   code?: string
 }
 export interface Activity {
@@ -14,6 +14,7 @@ export interface Activity {
   title: string
   summary: string
   icon: IconName
+  iconItem?: string
   location?: string
   sections: ContentSection[]
   conclusion: string
