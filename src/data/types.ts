@@ -5,7 +5,8 @@ export interface ContentSection {
   items?: string[]
   ordered?: boolean
   table?: { headers: string[]; rows: string[][] }
-  recipe?: { cells: string[]; output: string; note: string; quantity?: number }
+  recipe?: { cells: string[]; output: string; note: string; quantity?: number; shapeless?: boolean }
+  scribe?: { ingredients: string[]; glyph: string }
   apparatus?: { pedestals: string[]; reagent: string; output: string; sourceCost?: number; note: string }
   code?: string
 }

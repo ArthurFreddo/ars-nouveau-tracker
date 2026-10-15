@@ -396,6 +396,33 @@ h4 { color: #ead6a5; }.material-list li { background: #12231dda; border-color: #
 .pedestal-ingredient.southwest { grid-column: 1; grid-row: 3; }.pedestal-ingredient.southeast { grid-column: 3; grid-row: 3; }
 .activity-top .item-slot .item-icon { width: 44px; height: 44px; }
 .layered-item { position: relative; }.layered-item > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; image-rendering: pixelated; }
+.hero-progress-label { display: block; font-size: 8px; letter-spacing: 1px; color: #d2bea0; margin-bottom: 6px; }
+.recipe-kind { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; font-size: 9px; letter-spacing: .8px; color: #d3b990; }
+.recipe-kind b { padding: 4px 7px; border: 1px solid #9d7baf; color: #dfc3ee; background: #4a355452; font-size: 9px; font-weight: 600; letter-spacing: 0; }
+.crafting-cell { position: relative; padding-top: 13px; }
+.crafting-cell .slot-number { position: absolute; left: 5px; top: 3px; font-size: 8px; line-height: 1; color: #b9a2c6; }
+.crafting-recipe > .recipe-note { margin: 15px 0 0; font-size: 12px; }
+.crafting-recipe .shapeless-note { font-size: 11px; color: #dfc3ee; border-left: 2px solid #b58dc8; padding: 8px 10px; margin-top: 18px; background: #a570ba12; }
+.apparatus-order { max-width: 300px; font-size: 10px !important; line-height: 1.65 !important; color: #cbb7d4 !important; margin-top: 12px; }
+.apparatus-center small { font-size: 8px; line-height: 1.5; }
+.scribe-materials { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 17px 10px; }
+.scribe-ingredient { display: flex; flex-direction: column; align-items: center; gap: 9px; text-align: center; color: #e4d5eb; font-size: 11px; line-height: 1.5; }
+.scribe-ingredient .result-slot { width: 64px; height: 64px; }.scribe-ingredient .result-slot .item-icon { width: 40px; height: 40px; }
+.scribe-flow { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; font-size: 11px; color: #d8c1e7; margin: 24px 0 15px; padding: 14px 10px; border: 1px solid #7d638b; background: #19142170; }
+.scribe-flow > .item-icon { width: 31px; height: 31px; }.scribe-flow > span[aria-hidden] { color: #c7a5d9; font: 25px 'Pixelify Sans'; }
+.glyph-result { display: flex; align-items: center; gap: 7px; }.glyph-result .item-icon { width: 36px; height: 36px; }.glyph-result strong { font: 22px 'Pixelify Sans'; color: #e0c4f0; }
+.scribe-recipe > .recipe-note { margin-bottom: 0; font-size: 11px; }
+.crafting-recipe .recipe-layout, .apparatus-recipe .recipe-layout { display: grid; grid-template-columns: minmax(0, 1fr) 22px minmax(105px, 140px); gap: 16px; }
+.crafting-recipe .crafting-board, .apparatus-recipe .apparatus-board { width: 100%; min-width: 0; max-width: 310px; justify-self: center; }
+.crafting-recipe .crafting-grid, .apparatus-recipe .pedestal-layout { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.crafting-recipe .recipe-result, .apparatus-recipe .recipe-result { width: 100%; }
+@media (max-width: 600px) {
+  .crafting-recipe .recipe-layout, .apparatus-recipe .recipe-layout { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .crafting-recipe .recipe-arrow, .apparatus-recipe .recipe-arrow { transform: rotate(90deg); justify-self: center; line-height: 1; }
+  .crafting-recipe .recipe-result, .apparatus-recipe .recipe-result { justify-self: center; }
+  .recipe-kind { margin-bottom: 16px; font-size: 8px; }.recipe-kind b { font-size: 8px; }
+  .scribe-materials { grid-template-columns: repeat(auto-fit, minmax(78px, 1fr)); }.scribe-flow { gap: 7px; font-size: 10px; }
+}
 .summary-panel h2 { white-space: normal; font-size: 23px; line-height: 1.1; }
 
 /* A reference notebook available from every screen. */

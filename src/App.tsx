@@ -20,7 +20,7 @@ const mageIds = new Set(mageTasks.map(task => task.id))
 
 export default function App() {
   const [selected, setSelected] = useState(stages[0].id)
-  const [view, setView] = useState<'tower' | 'mage'>('tower')
+  const [view, setView] = useState<'tower' | 'mage'>('mage')
   const [essenceOpen, setEssenceOpen] = useState(false)
   const [pendingOnly, setPendingOnly] = useState(false)
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set())
@@ -49,7 +49,8 @@ export default function App() {
   const nextTask = stage.tasks.find(task => !completed.has(task.id))
   const completedStages = stages.filter(item => item.tasks.every(task => completed.has(task.id))).length
   const provisionalCount = stages.filter(item => item.provisional).flatMap(item => item.tasks).length
-  const magePercent = Math.round(mageTasks.filter(task => mageCompleted.has(task.id)).length / mageTasks.length * 100)
+  const mageCompletedCount = mageTasks.filter(task => mageCompleted.has(task.id)).length
+  const magePercent = Math.round(mageCompletedCount / mageTasks.length * 100)
   const portrait = view === 'mage' ? magePortraitFor(magePercent) : beatrizPortraits[(portraitOffset + stageIndex + completedCount) % beatrizPortraits.length]
   const creaturesCompleted = stages[4].tasks.filter(task => completed.has(task.id)).length
   const companions = creaturesCompleted >= Math.ceil(stages[4].tasks.length / 2) ? companionArtwork.magic : companionArtwork.garden
@@ -116,7 +117,7 @@ export default function App() {
           <div className="hero-kicker"><span>✧</span> O GRIMÓRIO DE BEATRIZ <i /> EDIÇÃO ARCANA</div>
           <h1>Ars Nouveau <span>Progress Tracker</span></h1>
           <p className="hero-subtitle"><span>✦</span> Diário de progressão mágica <span>✦</span></p>
-          <div className="hero-progress"><ProgressBar completed={completedCount} total={total} label="Progresso da torre" /></div>
+          <div className="hero-progress"><span className="hero-progress-label">{view === 'mage' ? 'PROGRESSO DO MAGO' : 'PROGRESSO DA TORRE'}</span><ProgressBar completed={view === 'mage' ? mageCompletedCount : completedCount} total={view === 'mage' ? mageTasks.length : total} label={view === 'mage' ? 'Progresso do mago no cabeçalho' : 'Progresso da torre'} /></div>
         </div>
         <div className="hero-art-label" title={view === 'mage' ? 'O retrato evolui com o progresso do mago.' : 'A pose muda ao trocar de etapa ou atualizar o progresso.'}><span>BEATRIZ</span><small>{portrait.label}</small></div>
         <button className="magic-toggle" aria-pressed={magicPaused} onClick={() => setMagicPaused(value => !value)} title={reducedMotion ? "O movimento reduzido está ativo no sistema." : undefined}><span aria-hidden="true">{animated ? "✦" : "◇"}</span>{reducedMotion ? "Movimento reduzido" : magicPaused ? "Ativar efeitos" : "Pausar efeitos"}</button>

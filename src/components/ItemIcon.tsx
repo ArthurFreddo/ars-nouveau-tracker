@@ -3,6 +3,8 @@ const items = '/images/items/'
 
 export function itemVisual(label: string): ItemVisual | undefined {
   label = label.replace(/\s*\(.*$/, '').split(' — ')[0]
+  const glyph = label.match(/^Glifo (Conjure Magelight|Leap|Bounce|Slowfall|Heal)$/i)
+  if (glyph) return { src: items + 'glyph_' + (glyph[1].toLowerCase() === 'conjure magelight' ? 'light' : glyph[1].toLowerCase()) + '.png' }
   const essence = label.match(/\b(air|fire|water|earth|abjuration|conjuration|manipulation) essence/i)
   if (essence) return { src: items + essence[1].toLowerCase() + '_essence.png' }
   if (/magebloom fibers?/i.test(label)) return { src: items + 'magebloom_fiber.png' }
@@ -31,6 +33,8 @@ export function itemVisual(label: string): ItemVisual | undefined {
     [/sugar/i, 'sugar'], [/redstone/i, 'redstone'], [/clock/i, 'clock'],
     [/blaze rods?/i, 'blaze_rod'], [/ender pearls?/i, 'ender_pearl'], [/emeralds?/i, 'emerald'],
     [/totem of undying/i, 'totem_of_undying'], [/nether star/i, 'nether_star'],
+    [/slimeballs?/i, 'slime_ball'], [/nether wart/i, 'nether_wart'],
+    [/glistering melon slices?/i, 'glistering_melon_slice'], [/chorus fruit/i, 'chorus_fruit'],
   ]
   const simple = simpleItems.find(([match]) => match.test(label))
   if (simple) return { src: items + simple[1] + '.png' }

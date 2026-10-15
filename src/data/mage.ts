@@ -23,7 +23,14 @@ export const mageTasks: MageActivity[] = [
         "title": "Materiais do glifo",
         "paragraphs": [
           "1 lanterna + 1 tocha; o desbloqueio ocorre na Scribe's Table, não na Crafting Table."
-        ]
+        ],
+        "scribe": {
+          "glyph": "Conjure Magelight",
+          "ingredients": [
+            "1 Lantern",
+            "1 Torch"
+          ]
+        }
       },
       {
         "title": "Como fazer",
@@ -59,7 +66,14 @@ export const mageTasks: MageActivity[] = [
         "title": "Materiais do glifo",
         "paragraphs": [
           "1 Air Essence + 3 Wilden Wings."
-        ]
+        ],
+        "scribe": {
+          "glyph": "Leap",
+          "ingredients": [
+            "1 Air Essence",
+            "3 Wilden Wings"
+          ]
+        }
       },
       {
         "title": "Como fazer",
@@ -89,7 +103,14 @@ export const mageTasks: MageActivity[] = [
         "title": "Materiais do glifo",
         "paragraphs": [
           "1 Abjuration Essence + 3 Slimeballs (ou alternativas equivalentes, caso a receita do modpack aceite)."
-        ]
+        ],
+        "scribe": {
+          "glyph": "Bounce",
+          "ingredients": [
+            "1 Abjuration Essence",
+            "3 Slimeballs"
+          ]
+        }
       },
       {
         "title": "Como fazer",
@@ -125,7 +146,17 @@ export const mageTasks: MageActivity[] = [
         "title": "Materiais do glifo",
         "paragraphs": [
           "1 Air Essence + 1 Wilden Wing + 3 penas + 1 Blaze Rod + 1 Nether Wart."
-        ]
+        ],
+        "scribe": {
+          "glyph": "Slowfall",
+          "ingredients": [
+            "1 Air Essence",
+            "1 Wilden Wing",
+            "3 Feathers",
+            "1 Blaze Rod",
+            "1 Nether Wart"
+          ]
+        }
       },
       {
         "title": "Como fazer",
@@ -161,7 +192,15 @@ export const mageTasks: MageActivity[] = [
         "title": "Materiais do glifo",
         "paragraphs": [
           "1 Abjuration Essence + 4 Glistering Melon Slices + 1 Golden Apple."
-        ]
+        ],
+        "scribe": {
+          "glyph": "Heal",
+          "ingredients": [
+            "1 Abjuration Essence",
+            "4 Glistering Melon Slices",
+            "1 Golden Apple"
+          ]
+        }
       },
       {
         "title": "Como fazer",
@@ -216,14 +255,24 @@ export const mageTasks: MageActivity[] = [
     "icon": "book",
     "sections": [
       {
-        "title": "Crafting Table, receita sem posição fixa",
-        "items": [
-          "1 Book",
-          "1 Iron Sword",
-          "1 Iron Pickaxe",
-          "1 Iron Axe",
-          "1 Iron Shovel."
-        ]
+        "title": "Crafting — Novice Spell Book",
+        "recipe": {
+          "cells": [
+            "Book",
+            "Iron Sword",
+            "Iron Pickaxe",
+            "Iron Axe",
+            "Iron Shovel",
+            "Vazio",
+            "Vazio",
+            "Vazio",
+            "Vazio"
+          ],
+          "output": "Novice Spell Book",
+          "note": "Um livro e uma ferramenta de ferro de cada tipo. A ordem dos cinco ingredientes é livre.",
+          "quantity": 1,
+          "shapeless": true
+        }
       },
       {
         "title": "Como fazer",
@@ -249,14 +298,24 @@ export const mageTasks: MageActivity[] = [
     "icon": "book",
     "sections": [
       {
-        "title": "Crafting Table, receita sem posição fixa",
-        "items": [
-          "1 Novice Spell Book",
-          "1 Obsidian ou Crying Obsidian (conforme alternativa aceita pelo JEI/EMI)",
-          "3 Diamonds",
-          "2 Quartz Blocks",
-          "2 Blaze Rods."
-        ]
+        "title": "Crafting — Mage's Spell Book",
+        "recipe": {
+          "cells": [
+            "Novice Spell Book",
+            "Obsidian",
+            "Diamond",
+            "Diamond",
+            "Diamond",
+            "Quartz Block",
+            "Quartz Block",
+            "Blaze Rod",
+            "Blaze Rod"
+          ],
+          "output": "Mage's Spell Book",
+          "note": "Use o Novice Spell Book como base. O exemplo mostra Obsidian; Crying Obsidian só se essa alternativa aparecer no JEI/EMI do seu modpack. Os nove ingredientes podem ser organizados livremente.",
+          "quantity": 1,
+          "shapeless": true
+        }
       },
       {
         "title": "Como fazer",
@@ -282,15 +341,24 @@ export const mageTasks: MageActivity[] = [
     "icon": "book",
     "sections": [
       {
-        "title": "Crafting Table, receita sem posição fixa",
-        "items": [
-          "1 Mage's Spell Book",
-          "3 Ender Pearls",
-          "2 Emeralds",
-          "1 Totem of Undying",
-          "1 Nether Star",
-          "1 Wilden Tribute."
-        ]
+        "title": "Crafting — Archmage Spell Book",
+        "recipe": {
+          "cells": [
+            "Mage's Spell Book",
+            "Ender Pearl",
+            "Ender Pearl",
+            "Ender Pearl",
+            "Emerald",
+            "Emerald",
+            "Totem of Undying",
+            "Nether Star",
+            "Wilden Tribute"
+          ],
+          "output": "Archmage Spell Book",
+          "note": "Use o Mage's Spell Book como base. Cada uma das três Ender Pearls e das duas Emeralds ocupa um espaço separado.",
+          "quantity": 1,
+          "shapeless": true
+        }
       },
       {
         "title": "Como fazer",
@@ -325,7 +393,7 @@ export const mageTasks: MageActivity[] = [
       {
         "title": "Receita no Enchanting Apparatus",
         "apparatus": {
-          "reagent": "1 semente comum compatível",
+          "reagent": "semente comum compatível",
           "pedestals": [
             "Source Gem",
             "Source Gem",
@@ -333,7 +401,8 @@ export const mageTasks: MageActivity[] = [
             "Source Gem"
           ],
           "output": "Magebloom Seeds",
-          "note": "1 semente comum compatível como item central + 4 Source Gems nos pedestais → Magebloom Seeds."
+          "note": "1 semente comum compatível como item central + 4 Source Gems nos pedestais → Magebloom Seeds.",
+          "sourceCost": 0
         }
       },
       {
@@ -341,6 +410,26 @@ export const mageTasks: MageActivity[] = [
         "paragraphs": [
           "produzir Magebloom Seeds, plantar em área cultivável e colher Magebloom. Cada Magebloom pode ser convertido em 4 Magebloom Fibers no crafting sem forma. Reservar 16 fibras para o conjunto Battlemage e novas fibras para a Alteration Table e Threads."
         ]
+      },
+      {
+        "title": "Crafting — Magebloom Fiber",
+        "recipe": {
+          "cells": [
+            "Magebloom",
+            "Vazio",
+            "Vazio",
+            "Vazio",
+            "Vazio",
+            "Vazio",
+            "Vazio",
+            "Vazio",
+            "Vazio"
+          ],
+          "output": "Magebloom Fiber",
+          "note": "Uma Magebloom produz quatro fibras. Guarde fibras para armadura, Alteration Table e Threads.",
+          "quantity": 4,
+          "shapeless": true
+        }
       }
     ],
     "conclusion": "plantação de Magebloom funcionando e pelo menos 16 fibras disponíveis ou já aplicadas no conjunto.",
@@ -377,7 +466,8 @@ export const mageTasks: MageActivity[] = [
             "Magebloom Fiber"
           ],
           "output": "Peça Battlemage correspondente",
-          "note": "peça de diamante no centro, 4 Magebloom Fibers nos pedestais → peça Battlemage correspondente. Este craft não é uma grade 3×3."
+          "note": "peça de diamante no centro, 4 Magebloom Fibers nos pedestais → peça Battlemage correspondente. Este craft não é uma grade 3×3.",
+          "sourceCost": 0
         }
       },
       {
@@ -452,20 +542,27 @@ export const mageTasks: MageActivity[] = [
     "iconItem": "Diamond Chestplate",
     "sections": [
       {
-        "title": "Como fazer",
-        "paragraphs": [
-          "usar as receitas de aprimoramento das peças indicadas no JEI/EMI da versão do modpack, com o equipamento existente como base. Aprimorar as quatro peças. Os tiers ampliam regeneração de mana e capacidade de Threads."
-        ]
+        "title": "Aprimoramento para Tier 2",
+        "apparatus": {
+          "reagent": "Peça Battlemage Tier 1",
+          "output": "Mesma peça Battlemage Tier 2",
+          "pedestals": [
+            "Blaze Rod",
+            "Blaze Rod"
+          ],
+          "sourceCost": 2500,
+          "note": "Aprimore uma peça por operação. Repita para capacete, peitoral, calças e botas. Receita padrão do Ars Nouveau 4.12.7; se o modpack a alterar, confira o JEI/EMI."
+        }
       },
       {
-        "title": "Materiais",
+        "title": "Como fazer",
         "paragraphs": [
-          "variam por peça/tier; não presumir que são os mesmos quatro Magebloom Fibers usados na confecção inicial. O site deve exibir esta observação e não inventar ingredientes adicionais."
+          "Coloque uma peça Tier 1 no aparelho central e um ingrediente em cada pedestal indicado. Forneça 2.500 Source e recolha a mesma peça no Tier 2. Repita para completar as quatro peças."
         ]
       }
     ],
     "conclusion": "quatro peças no Tier 2.",
-    "visualReference": "variam por peça/tier; não presumir que são os mesmos quatro Magebloom Fibers usados na confecção inicial. O site deve exibir esta observação e não inventar ingredientes adicionais.",
+    "visualReference": "Armadura Battlemage Tier 1 → Tier 2, no Enchanting Apparatus.",
     "sources": [
       {
         "label": "Guia fornecido no roteiro",
@@ -482,14 +579,28 @@ export const mageTasks: MageActivity[] = [
     "iconItem": "Diamond Chestplate",
     "sections": [
       {
+        "title": "Aprimoramento para Tier 3",
+        "apparatus": {
+          "reagent": "Peça Battlemage Tier 2",
+          "output": "Mesma peça Battlemage Tier 3",
+          "pedestals": [
+            "Ender Pearl",
+            "Ender Pearl",
+            "Chorus Fruit"
+          ],
+          "sourceCost": 5000,
+          "note": "Aprimore uma peça por operação. Repita para capacete, peitoral, calças e botas. Receita padrão do Ars Nouveau 4.12.7; se o modpack a alterar, confira o JEI/EMI."
+        }
+      },
+      {
         "title": "Como fazer",
         "paragraphs": [
-          "usar as receitas de upgrade Tier 3 no Enchanting Apparatus, partindo de cada peça Tier 2. Consultar JEI/EMI do modpack para materiais exatos; não construir receitas fictícias."
+          "Coloque uma peça Tier 2 no aparelho central e um ingrediente em cada pedestal indicado. Forneça 5.000 Source e recolha a mesma peça no Tier 3. Repita para completar as quatro peças."
         ]
       }
     ],
     "conclusion": "quatro peças Battlemage Tier 3.",
-    "visualReference": "Itens e estações descritos nas instruções fornecidas.",
+    "visualReference": "Armadura Battlemage Tier 2 → Tier 3, no Enchanting Apparatus.",
     "sources": [
       {
         "label": "Guia fornecido no roteiro",
@@ -552,15 +663,16 @@ export const mageTasks: MageActivity[] = [
         "apparatus": {
           "reagent": "Blank Thread",
           "pedestals": [
-            "Sourceberry",
-            "Sourceberry",
-            "Sourceberry",
+            "Sourceberry Bush",
+            "Sourceberry Bush",
+            "Sourceberry Bush",
             "Magebloom",
             "Magebloom",
             "Magebloom"
           ],
           "output": "Magic Capacity Thread",
-          "note": "1 Blank Thread ao centro + 3 Sourceberries + 3 Mageblooms nos pedestais. A documentação apresenta a imagem do Sourceberry Bush; usar a identificação exata do item oferecido no JEI/EMI do modpack caso o nome exibido varie."
+          "note": "Blank Thread no centro; 3 Sourceberry Bushes e 3 Mageblooms, um por pedestal. A receita local do Ars Nouveau 4.12.7 usa o arbusto (ars_nouveau:sourceberry_bush); confirme no JEI/EMI se o modpack alterar o ingrediente.",
+          "sourceCost": 0
         }
       },
       {
