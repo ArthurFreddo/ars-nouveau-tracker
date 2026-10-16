@@ -3,6 +3,12 @@ const items = '/images/items/'
 
 export function itemVisual(label: string): ItemVisual | undefined {
   label = label.replace(/\s*\(.*$/, '').split(' — ')[0]
+  if (/drygmy tokens?/i.test(label)) return { src: items + 'drygmy_token.png' }
+  if (/drygmy charms?|drygmy henge/i.test(label)) return { src: items + 'drygmy_charm.png' }
+  if (/containment jars?/i.test(label)) return { src: '/images/containment-jar.svg' }
+  if (/tablet of containment/i.test(label)) return { src: items + 'ritual_containment.png' }
+  if (/glass bottles?/i.test(label)) return { src: items + 'glass_bottle.png' }
+  if (/mossy cobblestone/i.test(label)) return { src: items + 'mossy_cobblestone.png', block: 'cube' }
   const glyph = label.match(/^Glifo (Conjure Magelight|Leap|Bounce|Slowfall|Heal)$/i)
   if (glyph) return { src: items + 'glyph_' + (glyph[1].toLowerCase() === 'conjure magelight' ? 'light' : glyph[1].toLowerCase()) + '.png' }
   const essence = label.match(/\b(air|fire|water|earth|abjuration|conjuration|manipulation) essence/i)
@@ -35,6 +41,7 @@ export function itemVisual(label: string): ItemVisual | undefined {
     [/totem of undying/i, 'totem_of_undying'], [/nether star/i, 'nether_star'],
     [/slimeballs?/i, 'slime_ball'], [/nether wart/i, 'nether_wart'],
     [/glistering melon slices?/i, 'glistering_melon_slice'], [/chorus fruit/i, 'chorus_fruit'],
+    [/raw cod|\bcod\b/i, 'cod'], [/\bapple\b/i, 'apple'], [/\bcarrot\b/i, 'carrot'],
   ]
   const simple = simpleItems.find(([match]) => match.test(label))
   if (simple) return { src: items + simple[1] + '.png' }

@@ -808,7 +808,8 @@ export const essences = [
     ],
     "source": "2.000",
     "uses": [
-      "Thread: Repairing"
+      "Thread: Repairing",
+      "Tablet of Containment · Drygmy"
     ]
   }
 ]

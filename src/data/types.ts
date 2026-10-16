@@ -9,6 +9,7 @@ export interface ContentSection {
   scribe?: { ingredients: string[]; glyph: string }
   apparatus?: { pedestals: string[]; reagent: string; output: string; sourceCost?: number; note: string }
   code?: string
+  diagram?: 'drygmy-wall'
 }
 export interface Activity {
   id: string

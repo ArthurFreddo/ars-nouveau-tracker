@@ -15,18 +15,22 @@ import { EssenceGuide } from './components/EssenceGuide'
 import { TowerRooms } from './components/TowerRooms'
 import { mageTasks } from './data/mage'
 import { magePortraitFor } from './data/mageArtwork'
+import { DrygmyProgressEntry, DrygmyProgressPanel } from './components/DrygmyProgress'
+import { drygmyTasks } from './data/drygmy'
 const ArcaneAtmosphere = lazy(() => import('./components/ArcaneAtmosphere'))
 const mageIds = new Set(mageTasks.map(task => task.id))
+const drygmyIds = new Set(drygmyTasks.map(task => task.id))
 
 export default function App() {
   const [selected, setSelected] = useState(stages[0].id)
-  const [view, setView] = useState<'tower' | 'mage'>('mage')
+  const [view, setView] = useState<'tower' | 'mage' | 'drygmy'>('mage')
   const [essenceOpen, setEssenceOpen] = useState(false)
   const [pendingOnly, setPendingOnly] = useState(false)
   const [expandedTasks, setExpandedTasks] = useState<Set<string>>(new Set())
   const [portraitOffset] = useState(() => Math.floor(Math.random() * beatrizPortraits.length))
   const { completed, toggle, saved } = useProgress()
   const { completed: mageCompleted, toggle: toggleMage, saved: mageSaved } = useProgress('ars-nouveau-tracker:mage:v1', mageIds)
+  const { completed: drygmyCompleted, toggle: toggleDrygmy, saved: drygmySaved } = useProgress('ars-nouveau-tracker:drygmy:v1', drygmyIds)
   const reducedMotion = useReducedMotion()
   const pageVisible = usePageInView()
   const [magicPaused, setMagicPaused] = useState(false)
@@ -51,6 +55,11 @@ export default function App() {
   const provisionalCount = stages.filter(item => item.provisional).flatMap(item => item.tasks).length
   const mageCompletedCount = mageTasks.filter(task => mageCompleted.has(task.id)).length
   const magePercent = Math.round(mageCompletedCount / mageTasks.length * 100)
+  const drygmyCompletedCount = drygmyTasks.filter(task => drygmyCompleted.has(task.id)).length
+  const currentCount = view === 'drygmy' ? drygmyCompletedCount : view === 'mage' ? mageCompletedCount : completedCount
+  const currentTotal = view === 'drygmy' ? drygmyTasks.length : view === 'mage' ? mageTasks.length : total
+  const currentLabel = view === 'drygmy' ? 'Progresso do Drygmy' : view === 'mage' ? 'Progresso do mago' : 'Progresso da torre'
+  const currentSaved = view === 'drygmy' ? drygmySaved : view === 'mage' ? mageSaved : saved
   const portrait = view === 'mage' ? magePortraitFor(magePercent) : beatrizPortraits[(portraitOffset + stageIndex + completedCount) % beatrizPortraits.length]
   const creaturesCompleted = stages[4].tasks.filter(task => completed.has(task.id)).length
   const companions = creaturesCompleted >= Math.ceil(stages[4].tasks.length / 2) ? companionArtwork.magic : companionArtwork.garden
@@ -102,6 +111,10 @@ export default function App() {
     setView('mage')
     requestAnimationFrame(() => document.getElementById('mage-progress')?.scrollIntoView({ behavior: animated ? 'smooth' : 'instant', block: 'start' }))
   }
+  function openDrygmy() {
+    setView('drygmy')
+    requestAnimationFrame(() => document.getElementById('drygmy-progress')?.scrollIntoView({behavior:animated?'smooth':'instant',block:'start'}))
+  }
 
   return <MagicPreferences value={animated}><MotionConfig reducedMotion={animated ? "user" : "always"}>
     {animated && <Suspense fallback={null}><ArcaneAtmosphere /></Suspense>}
@@ -117,14 +130,15 @@ export default function App() {
           <div className="hero-kicker"><span>✧</span> O GRIMÓRIO DE BEATRIZ <i /> EDIÇÃO ARCANA</div>
           <h1>Ars Nouveau <span>Progress Tracker</span></h1>
           <p className="hero-subtitle"><span>✦</span> Diário de progressão mágica <span>✦</span></p>
-          <div className="hero-progress"><span className="hero-progress-label">{view === 'mage' ? 'PROGRESSO DO MAGO' : 'PROGRESSO DA TORRE'}</span><ProgressBar completed={view === 'mage' ? mageCompletedCount : completedCount} total={view === 'mage' ? mageTasks.length : total} label={view === 'mage' ? 'Progresso do mago no cabeçalho' : 'Progresso da torre'} /></div>
+          <div className="hero-progress"><span className="hero-progress-label">{currentLabel.toLocaleUpperCase('pt-BR')}</span><ProgressBar completed={currentCount} total={currentTotal} label={`${currentLabel} no cabeçalho`} /></div>
         </div>
         <div className="hero-art-label" title={view === 'mage' ? 'O retrato evolui com o progresso do mago.' : 'A pose muda ao trocar de etapa ou atualizar o progresso.'}><span>BEATRIZ</span><small>{portrait.label}</small></div>
         <button className="magic-toggle" aria-pressed={magicPaused} onClick={() => setMagicPaused(value => !value)} title={reducedMotion ? "O movimento reduzido está ativo no sistema." : undefined}><span aria-hidden="true">{animated ? "✦" : "◇"}</span>{reducedMotion ? "Movimento reduzido" : magicPaused ? "Ativar efeitos" : "Pausar efeitos"}</button>
-        <div className="masthead-meta"><span className="version-tag">JAVA <b>1.20.1</b></span><span className={saved ? 'save-status' : 'save-status save-error'} role="status"><i />{saved ? 'Progresso salvo' : 'Salvamento indisponível'}</span></div>
+        <div className="masthead-meta"><span className="version-tag">JAVA <b>1.20.1</b></span><span className={currentSaved ? 'save-status' : 'save-status save-error'} role="status"><i />{currentSaved ? 'Progresso salvo' : 'Salvamento indisponível'}</span></div>
       </header>
 
       <MageProgressEntry completed={mageCompleted} saved={mageSaved} active={view === 'mage'} onOpen={openMage} onEssences={() => setEssenceOpen(true)} />
+      <DrygmyProgressEntry completed={drygmyCompleted} saved={drygmySaved} active={view === 'drygmy'} onOpen={openDrygmy} />
 
       <nav className="stage-nav wood-frame" aria-label="Etapas da jornada">
         {stages.map((item, index) => {
@@ -142,7 +156,7 @@ export default function App() {
         })}
       </nav>
 
-      {view === 'mage' ? <MageProgressPanel completed={mageCompleted} saved={mageSaved} onToggle={toggleMage} onBack={() => setView('tower')} onEssences={() => setEssenceOpen(true)} /> : <div className="workspace">
+      {view === 'mage' ? <MageProgressPanel completed={mageCompleted} saved={mageSaved} onToggle={toggleMage} onBack={() => setView('tower')} onEssences={() => setEssenceOpen(true)} /> : view === 'drygmy' ? <DrygmyProgressPanel completed={drygmyCompleted} saved={drygmySaved} onToggle={toggleDrygmy} onBack={openMage} onEssences={() => setEssenceOpen(true)} /> : <div className="workspace">
         <AnimatePresence mode="wait" initial={false}><motion.section key={stage.id} className="stage-panel wood-frame" aria-labelledby="stage-title" onAnimationComplete={focusRequestedTask}
           initial={animated ? { opacity: 0, y: 16 } : false} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: animated ? -8 : 0 }} transition={{ duration: animated ? .28 : 0, ease: [.22, 1, .36, 1] }}>
           <div className="stage-intro"><div className="stage-heading">
